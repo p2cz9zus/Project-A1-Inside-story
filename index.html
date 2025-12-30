@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Inside Story | Innovators A1</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg: #0a0a0a;
+            --accent: #00d4ff;
+            --danger: #ff4b2b;
+            --text: #ffffff;
+            --glass: rgba(255, 255, 255, 0.05);
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Noto Sans JP', sans-serif;
+            margin: 0;
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+
+        /* Hero Section */
+        .story-hero {
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('zenntaizu2.jpeg') center/cover;
+            background-attachment: fixed;
+        }
+
+        .story-hero h1 {
+            font-size: clamp(2rem, 8vw, 5rem);
+            margin: 0;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .story-hero p {
+            font-size: 1.2rem;
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        /* Timeline / Story Sections */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 100px 20px;
+        }
+
+        .story-block {
+            margin-bottom: 150px;
+            position: relative;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease-out;
+        }
+
+        .story-block.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .step-num {
+            font-size: 6rem;
+            font-weight: 800;
+            color: var(--glass);
+            position: absolute;
+            top: -50px;
+            left: -20px;
+            z-index: -1;
+        }
+
+        .story-content h2 {
+            border-left: 4px solid var(--accent);
+            padding-left: 20px;
+            margin-bottom: 30px;
+            font-size: 2rem;
+        }
+
+        .highlight-red { color: var(--danger); font-weight: bold; }
+        .highlight-blue { color: var(--accent); font-weight: bold; }
+
+        /* Media grid */
+        .media-box {
+            background: var(--glass);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .media-box img, .media-box video {
+            width: 100%;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .media-box img:hover {
+            transform: scale(1.02);
+        }
+
+        /* Special Card for Code/Trouble */
+        .trouble-card {
+            background: linear-gradient(135deg, rgba(255,75,43,0.1), rgba(0,0,0,0));
+            border: 1px solid var(--danger);
+            padding: 30px;
+            border-radius: 20px;
+        }
+
+        /* Footer Quote */
+        .quote-section {
+            text-align: center;
+            padding: 150px 20px;
+            background: var(--glass);
+        }
+
+        .quote-text {
+            font-size: 1.8rem;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        .back-home {
+            display: inline-block;
+            padding: 15px 40px;
+            border: 2px solid var(--accent);
+            color: var(--accent);
+            text-decoration: none;
+            border-radius: 50px;
+            transition: all 0.3s;
+            margin-top: 50px;
+        }
+
+        .back-home:hover {
+            background: var(--accent);
+            color: #000;
+        }
+
+        /* 3Dカード効果のベース */
+　　　　 .story-block {
+            perspective: 1000px; /* 3Dの奥行きを設定 */
+        }
+
+        .media-box {
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+            box-shadow: 0 25px 50px -12px rgba(0, 212, 255, 0.2);
+        }
+
+        /* スクロール時に少し傾くエフェクト */
+         .story-block.visible .media-box {
+            animation: floating3D 6s ease-in-out infinite;
+        }
+
+        @keyframes floating3D {
+            0%, 100% { transform: rotateY(-5deg) rotateX(2deg) translateZ(20px); }
+            50% { transform: rotateY(5deg) rotateX(-2deg) translateZ(50px); }
+        }
+
+        /* テキストを前面に浮かび上がらせる */
+        .story-content h2 {
+            transform: translateZ(30px);
+            text-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+
+        /* マウスホップでさらに傾く */
+        .media-box:hover {
+            transform: rotateY(10deg) rotateX(5deg) scale(1.05) !important;
+            border-color: var(--accent);
+        }
+
+
+        /* 背景にデジタルノイズを重ねて質感を出す */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: url('https://grainy-gradients.vercel.app/noise.svg');
+    opacity: 0.05;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+/* スクロールバーのカスタマイズ */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
+
+/* 巨大な背景文字（スクロールに合わせて動く） */
+.bg-text {
+    position: fixed;
+    font-size: 20vw;
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.02);
+    white-space: nowrap;
+    z-index: -2;
+    pointer-events: none;
+    text-transform: uppercase;
+}
+
+/* 進捗インジケーター */
+.progress-bar {
+    position: fixed;
+    top: 0; left: 0; width: 0%; height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--danger));
+    z-index: 10000;
+}
+
+/* テキストアニメーション */
+.char-animate {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+}
+    </style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+<div class="bg-text" id="bgText">INNOVATION / A1 PROJECT / EVOLUTION</div>    
+
+<section class="story-hero">
+    <p>PROJECT A1 : INSIDE STORY</p>
+    <h1>制作秘話</h1>
+    <p>〜ファン駆動からタイヤ駆動へ、そして成功率90%の自律走行へ〜</p>
+</section>
+
+<div class="container">
+    
+    <div class="story-block animate">
+        <span class="step-num">01</span>
+        <div class="story-content">
+            <h2>「計算通り」のはずだった初期設計</h2>
+            <p>プロジェクトのスタートは、順調でした。スマートな車体を目指し、<span class="highlight-blue">台車部分と全体図の基礎設計（ヒストリー①）</span>、そして入念な強度計算を繰り返しました。この時点ですでに、ファンの力で風を切って車体を進めることができるのか？という不安がありました。</p>
+            <div class="media-box">
+                <img src="daisya.jpg" alt="初期設計図">
+            </div>
+        </div>
+    </div>
+
+    <div class="story-block animate">
+        <span class="step-num">02</span>
+        <div class="story-content">
+            <h2>現実と「苦渋の決断」</h2>
+            <p>ファン駆動のまま製作を続行するか、または方針転換するかを決める必要があった。プロペラ自体は回るが、<span class="highlight-red">まるで車体は1ミリも動かないように思われた。</span>ここで、設計を白紙に戻し、タイヤ駆動へ転換することとなった。</p>
+            <div class="media-box">
+                <video src="fan.MP4" autoplay muted loop></video>
+            </div>
+        </div>
+    </div>
+
+    <div class="story-block animate">
+        <span class="step-num">03</span>
+        <div class="story-content">
+            <h2>ゼロからの再構築：回路とプログラム</h2>
+            <p>タイヤ駆動への転換は、単なる部品交換ではなく、配線の引き直し、そして<span class="highlight-blue">「直進→停止→Uターン」のシーケンス制御</span>の実装を新たに行う必要があった。特にフラグ管理（isFinished）によるロジックは、幾度となく試した末に完成させることができた。</p>
+            <div class="media-box">
+                <img src="kuwashiikairo.jpeg" alt="回路図">
+            </div>
+        </div>
+    </div>
+
+    <div class="story-block animate">
+        <span class="step-num">04</span>
+        <div class="story-content">
+            <div class="trouble-card">
+                <h2>予期せぬトラブル・リカバリー</h2>
+                <p>電源ケースの不具合による<span class="highlight-red">9V電池への急な仕様変更</span>。トランジスタ（E-B-C）の配線ミスにも注意した。</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="story-block animate">
+        <span class="step-num">05</span>
+        <div class="story-content">
+            <h2>最終フェーズ、成功の瞬間</h2>
+            <p>最終検証。車体は滑らかに走り出し、正確に180度反転して再走行。実働データから旋回時間をミリ秒単位で微調整した結果、<span class="highlight-blue">成功率90%以上</span>という確かな成果を手にした。</p>
+            <div class="media-box">
+                <video src="test_run_1.mp4" controls></video>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<section class="quote-section">
+    <div class="quote-text">「A1班の強みとは？」</div>
+    <p>泥臭い試走と改善のサイクルこそが、A1班の真の強みである。</p>
+    <a href="index.html" class="back-home">TOPへ戻る</a>
+</section>
+
+<script>
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.animate').forEach(el => observer.observe(el));
+
+    // 進捗バーと背景文字のスクロール連動
+window.addEventListener('scroll', () => {
+    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = (winScroll / height) * 100;
+    
+    // 進捗バー
+    document.getElementById("progressBar").style.width = scrolled + "%";
+    
+    // 背景文字を横にスライド（パララックス）
+    const bgText = document.getElementById("bgText");
+    bgText.style.transform = `translateX(${-winScroll * 0.2}px) translateY(20vh)`;
+});
+
+// マウスストーカー（Awardサイトの定番）
+const cursor = document.createElement('div');
+cursor.style.cssText = `
+    width: 20px; height: 20px; border: 2px solid var(--accent);
+    border-radius: 50%; position: fixed; pointer-events: none;
+    z-index: 10001; transition: transform 0.1s ease;
+`;
+document.body.appendChild(cursor);
+
+window.addEventListener('mousemove', (e) => {
+    cursor.style.left = e.clientX - 10 + 'px';
+    cursor.style.top = e.clientY - 10 + 'px';
+});
+
+// インタラクティブ要素にホバーした時のカーソル変化
+document.querySelectorAll('a, .media-box').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.style.transform = 'scale(3)');
+    el.addEventListener('mouseleave', () => cursor.style.transform = 'scale(1)');
+});
+</script>
+
+</body>
+</html>
